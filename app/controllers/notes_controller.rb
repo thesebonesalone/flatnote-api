@@ -6,8 +6,11 @@ class NotesController < ApplicationController
 
   def create
     note = Note.new(note_params)
-    note.save
-    render :json => note
+    if note.save
+      render :json => {note: note, message: "Success"}
+    else
+      render :json => {message: "Unable to create note. Please fill out all fields"}
+    end
   end
 
   def destroy
@@ -19,8 +22,11 @@ class NotesController < ApplicationController
   def update
     note = Note.find(params[:id])
     note.update(note_params)
-    note.save
-    render :json => note
+    if note.save
+      render :json => {note: note, message: "Success"}
+    else
+      render :json => {message: "Unable to save note. Please fill out all fields."}
+    end
   end
 
   private

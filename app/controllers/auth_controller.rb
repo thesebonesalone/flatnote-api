@@ -6,7 +6,8 @@ class AuthController < ApplicationController
         else
             # Now check Password
             if user.authenticate(params[:password])
-                render json: { message: "Success", username: user.username, id: user.id}
+                notes = Note.where(user: user)
+                render json: { message: "Success", username: user.username, id: user.id, notes: notes}
             else
                 render json: {message: "Invalid username and password"}
             end

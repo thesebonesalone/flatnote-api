@@ -2,12 +2,20 @@ require 'byebug'
 
 class UsersController < ApplicationController
     def create
-        
-        user = User.new(user_params)
-        if user.save  
-            render :json => {user: user, message: "Success"}
+
+        user = User.find_by(username: user_params[:username])
+        # byebug
+        if user === nil
+            user = User.new(user_params)
+            if user.save
+                render :json => {username: user.username, id: user.id, notes: notes, message: "Success"}
+            else
+                render :json => {message: "Unable to create User"}
+            end
         else
-            render :json => {message: "Unable to create User"}
+            notes = Note.where(user: user)
+            render json: { message: "Success", username: user.username, id: user.id, notes: notes}
+            
         end
         
     end
